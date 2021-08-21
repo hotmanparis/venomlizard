@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 
-from modeling_t5_customm import VLT5
+from modeling_t5_custom import VLT5
 
 class VLT5Pretraining(VLT5):
     def __init__(self, config):
