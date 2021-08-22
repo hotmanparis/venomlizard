@@ -73,3 +73,29 @@ class ConditionTextImage(nn.Module):
         L = L + VL
 
         return L
+        
+
+class ConditionTextImage2(nn.Module):
+    ''' Condition text tokens with global vision embedding
+
+    Input:
+        L (tensor): text embeddings (Batch size x seq length x hdim)
+        V (tensor): global vision embedding (Batch size x hdim)
+    Output:
+        L (tensor) : conditioned text embeddings (Batch size x seq length x hdim)
+    '''
+
+    def __init__(self, hdim = 768, factor=1):
+        super().__init__()
+        # Submodules
+        self.fc_0 = nn.Linear(hdim, hdim//factor)
+        self.fc_1 = nn.Linear(hdim//factor, hdim)
+        self.actvn = nn.ReLU()
+
+    def forward(self, L, V):
+        V = V.unsqueeze(1)
+        VL = L + V
+        VL = self.fc_0(self.actvn(VL))
+        VL = self.fc_1(self.actvn(VL))
+
+        return VL

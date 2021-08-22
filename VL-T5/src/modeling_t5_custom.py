@@ -19,7 +19,7 @@ from transformers import BeamScorer, BeamSearchScorer
 
 # from utils import *
 
-from custom_layer import EmbeddingNet, ConditionTextImage
+from custom_layer import EmbeddingNet, ConditionTextImage, ConditionTextImage2
 
 logger = logging.get_logger(__name__)
 
@@ -186,8 +186,10 @@ class JointEncoder(T5Stack):
         self.model_parallel = False
         self.device_map = None
 
-        self.conditiontext_0 = ConditionTextImage(config.d_model, factor=2)
-        self.conditiontext_1 = ConditionTextImage(config.d_model, factor=2)
+        #self.conditiontext_0 = ConditionTextImage(config.d_model, factor=2)
+        #self.conditiontext_1 = ConditionTextImage(config.d_model, factor=2)
+
+        self.conditiontext_00 = ConditionTextImage(config.d_model, factor=1)
 
     def set_input_embeddings(self, new_embeddings):
         self.embed_tokens = new_embeddings
@@ -230,8 +232,10 @@ class JointEncoder(T5Stack):
 
         V_L = vis_embeds.size(1)
 
-        inputs_embeds = self.conditiontext_0(inputs_embeds, vis_c)
-        inputs_embeds = self.conditiontext_1(inputs_embeds, vis_c)
+        #inputs_embeds = self.conditiontext_0(inputs_embeds, vis_c)
+        #inputs_embeds = self.conditiontext_1(inputs_embeds, vis_c)
+
+        inputs_embeds = self.conditiontext_00(inputs_embeds, vis_c)
 
         inputs_embeds = torch.cat([inputs_embeds, vis_embeds], dim=1)
 
