@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 
-from modeling_t5 import VLT5
+from modeling_t5_custom import VLT5
 class VLT5VQA(VLT5):
     def __init__(self, config, num_answers=None, label2ans=None):
         super().__init__(config)

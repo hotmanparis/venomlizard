@@ -236,7 +236,10 @@ class JointEncoder(T5Stack):
         #inputs_embeds = self.conditiontext_0(inputs_embeds, vis_c)
         #inputs_embeds = self.conditiontext_1(inputs_embeds, vis_c)
 
+
         inputs_embeds[mask] = self.conditiontext_00(inputs_embeds, vis_c, mask).float()
+
+        #torch.save(inputs_embeds, "fireplace2.pt")
 
         inputs_embeds = torch.cat([inputs_embeds, vis_embeds], dim=1)
 
