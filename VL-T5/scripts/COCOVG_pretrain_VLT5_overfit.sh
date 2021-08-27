@@ -1,7 +1,7 @@
 # The name of experiment
 name=VLT5
 
-output=/content/drive/MyDrive/datasets/output_overfit
+output=snap/pretrain/$name
 
 PYTHONPATH=$PYTHONPATH:./src \
 python -m torch.distributed.launch \

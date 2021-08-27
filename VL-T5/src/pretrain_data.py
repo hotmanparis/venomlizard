@@ -346,7 +346,7 @@ class PretrainDataset(Dataset):
             if task == 'lm':
                 assert text_source in ["mscoco", 'vg']
 
-                prefix = "span prediction:"
+                prefix = "<extra_id_99>"
                 sent = datum['sent']
                 source_text, target_text = preprocess.corrupt_spans(
                     sent, mask_ratio=self.args.word_mask_rate, prefix=prefix)
@@ -380,10 +380,16 @@ class PretrainDataset(Dataset):
 
                 sent = datum['sent']
 
+                prefix_dict = {'vqa': '<extra_id_98>',
+                               'gqa': '<extra_id_97>',
+                               'visual7w': '<extra_id_96>'}
+
                 if self.args.single_vqa_prefix:
-                    source_text = f"vqa: {sent}"
+                    #source_text = f"vqa: {sent}"
+                    source_text = "{} {}".format(prefix_dict['vqa'], sent)
                 else:
-                    source_text = f"{text_source}: {sent}"
+                    #source_text = f"{text_source}: {sent}"
+                    source_text = "{} {}".format(prefix_dict[text_source], sent)
                 if self.args.oscar_tags:
                     input_tokens = [source_text]
                     input_tokens.append('tags:')
@@ -417,7 +423,8 @@ class PretrainDataset(Dataset):
                         # other_datum = self.data[random.randint(0, len(self.data)-1)]
                     sent = other_datum['sent']
 
-                prefix = "image text match:"
+                #prefix = "image text match:"
+                prefix = "<extra_id_95>"
                 source_text = f"{prefix} {sent}"
 
                 if self.args.oscar_tags:
@@ -447,7 +454,8 @@ class PretrainDataset(Dataset):
                     captions.append(caption)
 
                 # prefix = "describe visual inputs:"
-                prefix = "caption region:"
+                #prefix = "caption region:"
+                prefix = "<extra_id_94>"
                 source_text, target_text = preprocess.ground_caption(
                     captions, self.args.n_ground, prefix=prefix, sort=False)
 
@@ -468,7 +476,8 @@ class PretrainDataset(Dataset):
                     captions.append(caption)
 
                 # prefix = "refer expressions:"
-                prefix = "visual grounding:"
+                #prefix = "visual grounding:"
+                prefix = "<extra_id_93>"
                 source_text, target_text = preprocess.refer_expression(
                     captions, self.args.n_ground, prefix=prefix, sort=False)
 

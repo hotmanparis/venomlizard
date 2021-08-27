@@ -189,7 +189,7 @@ class JointEncoder(T5Stack):
         #self.conditiontext_0 = ConditionTextImage(config.d_model, factor=2)
         #self.conditiontext_1 = ConditionTextImage(config.d_model, factor=2)
 
-        self.conditiontext_00 = ConditionTextImage(config.d_model, factor=1)
+        self.conditiontext_00 = ConditionTextImage2(config.d_model, factor=1)
 
     def set_input_embeddings(self, new_embeddings):
         self.embed_tokens = new_embeddings
@@ -212,6 +212,7 @@ class JointEncoder(T5Stack):
         return_dict=None,
     ):
 
+        mask = input_ids < 32000
         if inputs_embeds is None:
             assert self.embed_tokens is not None, "You have to initialize the model with valid token embeddings"
             inputs_embeds = self.embed_tokens(input_ids) # B, L, hdim
@@ -235,7 +236,7 @@ class JointEncoder(T5Stack):
         #inputs_embeds = self.conditiontext_0(inputs_embeds, vis_c)
         #inputs_embeds = self.conditiontext_1(inputs_embeds, vis_c)
 
-        inputs_embeds = self.conditiontext_00(inputs_embeds, vis_c)
+        inputs_embeds[mask] = self.conditiontext_00(inputs_embeds, vis_c, mask).float()
 
         inputs_embeds = torch.cat([inputs_embeds, vis_embeds], dim=1)
 
