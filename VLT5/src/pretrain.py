@@ -319,7 +319,7 @@ class Trainer(TrainerBase):
                         print(accu_str)
                         accu_str += '\n\n'
 
-            dist.barrier()
+                    dist.barrier()
 
             if self.verbose:
                 # Save
