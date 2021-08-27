@@ -105,7 +105,7 @@ class TrainerBase(object):
             **kwargs
         )
 
-        model.shared.reset_parameters()
+        #model.shared.reset_parameters()
         #model.apply(weight_reset)
         return model
 
