@@ -1,7 +1,7 @@
 # The name of experiment
 name=VLT5
 
-output=snap/pretrain_no_reset_untie/$name
+output=snap/pretrain_no_reset_untie_groupnorm/$name
 
 PYTHONPATH=$PYTHONPATH:./src \
 python -m torch.distributed.launch \

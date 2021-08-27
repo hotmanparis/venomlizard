@@ -191,6 +191,9 @@ class JointEncoder(T5Stack):
 
         self.conditiontext_00 = ConditionTextImage2(config.d_model, factor=1)
 
+        self.groupnorm_l = nn.GroupNorm(8, config.d_model)
+        self.groupnorm_v = nn.GroupNorm(8, config.d_model)
+
     def set_input_embeddings(self, new_embeddings):
         self.embed_tokens = new_embeddings
         self.visual_embedding.obj_order_embedding = new_embeddings
@@ -236,6 +239,11 @@ class JointEncoder(T5Stack):
         #inputs_embeds = self.conditiontext_0(inputs_embeds, vis_c)
         #inputs_embeds = self.conditiontext_1(inputs_embeds, vis_c)
 
+        inputs_embeds = inputs_embeds.transpose(1,2)
+        inputs_embeds = self.groupnorm_l(inputs_embeds)
+        inputs_embeds = inputs_embeds.transpose(1,2)
+
+        vis_c = self.groupnorm_v(vis_c)
 
         inputs_embeds[mask] = self.conditiontext_00(inputs_embeds, vis_c, mask).float()
 
