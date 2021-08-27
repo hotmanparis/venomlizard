@@ -243,7 +243,7 @@ class JointEncoder(T5Stack):
         inputs_embeds = self.groupnorm_l(inputs_embeds)
         inputs_embeds = inputs_embeds.transpose(1,2)
 
-        vis_c = self.groupnorm_v(vis_c)
+        vis_c = self.groupnorm_l(vis_c)
 
         inputs_embeds[mask] = self.conditiontext_00(inputs_embeds, vis_c, mask).float()
 
@@ -417,8 +417,9 @@ class VLT5(T5ForConditionalGeneration):
 
     def set_input_embeddings(self, new_embeddings):
         self.shared = new_embeddings
-        new_embeddings_copy = copy.deepcopy(new_embeddings)
-        self.encoder.set_input_embeddings(new_embeddings_copy)
+        #new_embeddings_copy = copy.deepcopy(new_embeddings)
+        #self.encoder.set_input_embeddings(new_embeddings_copy)
+        self.encoder.set_input_embeddings(new_embeddings)
         self.decoder.set_input_embeddings(new_embeddings)
 
     def extend_vocab(self, vocab_size):
