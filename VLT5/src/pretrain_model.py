@@ -61,8 +61,11 @@ class VLT5Pretraining(VLT5):
                 results[f'{task}_loss'] = task_loss[task]
                 results[f'{task}_loss_count'] = task_counts[task]
 
-        diff = torch.sum(self.encoder.embed_tokens.weight - self.decoder.embed_tokens.weight)
-        print("Embedding diff: {}".format(diff))
+        diff1 = torch.sum(self.encoder.embed_tokens.weight - self.decoder.embed_tokens.weight)
+        diff2 = torch.sum(self.decoder.embed_tokens.weight - self.lm_head.weight)
+        print("Encoder decoder embedding diff: {}".format(diff1))
+        print("Decoder Out embedding diff: {}".format(diff2))
+
         return results
 
     @torch.no_grad()
