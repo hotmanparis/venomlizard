@@ -409,7 +409,8 @@ class VLT5(T5ForConditionalGeneration):
 
     def set_input_embeddings(self, new_embeddings):
         self.shared = new_embeddings
-        self.encoder.set_input_embeddings(new_embeddings)
+        new_embeddings_copy = copy.deepcopy(new_embeddings)
+        self.encoder.set_input_embeddings(new_embeddings_copy)
         self.decoder.set_input_embeddings(new_embeddings)
 
     def extend_vocab(self, vocab_size):
