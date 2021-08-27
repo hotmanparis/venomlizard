@@ -14,7 +14,7 @@ python -m torch.distributed.launch \
         --optim adamw \
         --warmup_ratio 0.05 \
         --lr 1e-4 \
-        --num_workers 1 \
+        --num_workers 8 \
         --clip_grad_norm 1.0 \
         --losses 'lm,qa,ground_caption,refer,itm' \
         --backbone 't5-base' \
