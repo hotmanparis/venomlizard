@@ -142,7 +142,7 @@ class Trainer(TrainerBase):
 
         global_step = 0
 
-        avg_valid_loss = 20.0
+        #avg_valid_loss = 20.0
 
         for epoch in range(self.args.epochs):
             if self.start_epoch is not None:
@@ -271,7 +271,7 @@ class Trainer(TrainerBase):
             dist.barrier()
 
             # Validation
-            if (epoch + 1) % 10 == 0:
+            if (epoch + 1) % 10 == 0 or epoch == 0:
                 valid_results, valid_uid2ans = self.evaluate_epoch(epoch=epoch)
 
                 valid_results = reduce_dict(valid_results, average=False)
