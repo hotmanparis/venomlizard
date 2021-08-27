@@ -9,7 +9,7 @@ python -m torch.distributed.launch \
     src/pretrain.py \
         --distributed --multiGPU --fp16 \
         --train mscoco_resplit_train_overfit \
-        --valid mscoco_resplit_val_overfit \
+        --valid mscoco_resplit_train_overfit \
         --batch_size 16 \
         --optim adamw \
         --warmup_ratio 0.05 \
