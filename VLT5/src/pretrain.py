@@ -268,55 +268,56 @@ class Trainer(TrainerBase):
             dist.barrier()
 
             # Validation
-            valid_results, valid_uid2ans = self.evaluate_epoch(epoch=epoch)
+            if (epoch + 1) % 10 == 0:
+                valid_results, valid_uid2ans = self.evaluate_epoch(epoch=epoch)
 
-            valid_results = reduce_dict(valid_results, average=False)
-            if self.verbose:
-                valid_loss = valid_results['total_loss']
-                valid_loss_count = valid_results['total_loss_count']
+                valid_results = reduce_dict(valid_results, average=False)
+                if self.verbose:
+                    valid_loss = valid_results['total_loss']
+                    valid_loss_count = valid_results['total_loss_count']
 
-                avg_valid_loss = valid_loss / valid_loss_count
-                losses_str = f"Valid Loss: {avg_valid_loss:.3f}\n"
+                    avg_valid_loss = valid_loss / valid_loss_count
+                    losses_str = f"Valid Loss: {avg_valid_loss:.3f}\n"
 
-                for name, loss in valid_results.items():
-                    if name[-4:] == 'loss':
-                        loss_count = int(valid_results[name+'_count'])
-                        if loss_count > 0:
-                            avg_loss = loss / loss_count
-                            losses_str += f"{name} ({loss_count}): {avg_loss:.3f} "
-                            wandb.log({f'Valid Loss/{name}': avg_loss}, step=epoch)
+                    for name, loss in valid_results.items():
+                        if name[-4:] == 'loss':
+                            loss_count = int(valid_results[name+'_count'])
+                            if loss_count > 0:
+                                avg_loss = loss / loss_count
+                                losses_str += f"{name} ({loss_count}): {avg_loss:.3f} "
+                                wandb.log({f'Valid Loss/{name}': avg_loss}, step=epoch)
 
-                losses_str += '\n'
-                print(losses_str)
+                    losses_str += '\n'
+                    print(losses_str)
 
-            if 'qa' in self.args.losses:
-                dset2score, dset2cnt, score, cnt = self.val_loader.dataset.evaluator.evaluate(valid_uid2ans)
+                if 'qa' in self.args.losses:
+                    dset2score, dset2cnt, score, cnt = self.val_loader.dataset.evaluator.evaluate(valid_uid2ans)
 
-                if len(dset2score) == 0:
-                    dset2score = {'vqa': 0, 'gqa': 0, 'visual7w': 0}
-                    dset2cnt = {'vqa': 1, 'gqa': 1, 'visual7w': 1}
-                    cnt = 3
-                    score = 0
+                    if len(dset2score) == 0:
+                        dset2score = {'vqa': 0, 'gqa': 0, 'visual7w': 0}
+                        dset2cnt = {'vqa': 1, 'gqa': 1, 'visual7w': 1}
+                        cnt = 3
+                        score = 0
 
-                dset2score = reduce_dict(dset2score, average=False)
-                dset2cnt = reduce_dict(dset2cnt, average=False)
-                score_cnt_dict = reduce_dict({'score': score, 'cnt': cnt}, average=False)
+                    dset2score = reduce_dict(dset2score, average=False)
+                    dset2cnt = reduce_dict(dset2cnt, average=False)
+                    score_cnt_dict = reduce_dict({'score': score, 'cnt': cnt}, average=False)
 
-                if self.args.gpu == 0:
-                    score = score_cnt_dict['score']
-                    cnt = score_cnt_dict['cnt']
-                    accu = score / cnt
-                    dset2accu = {}
-                    for dset in dset2cnt:
-                        dset2accu[dset] = dset2score[dset] / dset2cnt[dset]
-                    accu_str = "Overall QA Acc %0.4f" % (accu)
-                    wandb.log({f'Valid QA Acc/Overall': accu}, step=epoch)
-                    sorted_keys = sorted(dset2accu.keys())
-                    for key in sorted_keys:
-                        accu_str += ", %s Acc %0.4f" % (key, dset2accu[key])
-                        wandb.log({f'Valid QA Acc/{key}': dset2accu[key]}, step=epoch)
-                    print(accu_str)
-                    accu_str += '\n\n'
+                    if self.args.gpu == 0:
+                        score = score_cnt_dict['score']
+                        cnt = score_cnt_dict['cnt']
+                        accu = score / cnt
+                        dset2accu = {}
+                        for dset in dset2cnt:
+                            dset2accu[dset] = dset2score[dset] / dset2cnt[dset]
+                        accu_str = "Overall QA Acc %0.4f" % (accu)
+                        wandb.log({f'Valid QA Acc/Overall': accu}, step=epoch)
+                        sorted_keys = sorted(dset2accu.keys())
+                        for key in sorted_keys:
+                            accu_str += ", %s Acc %0.4f" % (key, dset2accu[key])
+                            wandb.log({f'Valid QA Acc/{key}': dset2accu[key]}, step=epoch)
+                        print(accu_str)
+                        accu_str += '\n\n'
 
             dist.barrier()
 
