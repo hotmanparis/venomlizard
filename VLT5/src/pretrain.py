@@ -141,6 +141,9 @@ class Trainer(TrainerBase):
             dist.barrier()
 
         global_step = 0
+
+        avg_valid_loss = 20.0
+
         for epoch in range(self.args.epochs):
             if self.start_epoch is not None:
                 epoch += self.start_epoch
