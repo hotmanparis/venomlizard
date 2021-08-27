@@ -326,10 +326,10 @@ class Trainer(TrainerBase):
                     best_eval_loss = avg_valid_loss
                 #     self.save("BEST_EVAL_LOSS")
 
-                #self.save("Epoch%02d" % (epoch + 1))
+                self.save("Epoch%02d" % (epoch + 1))
 
-                if (epoch+1)%5 == 0:
-                    self.save("Epoch%02d" % (epoch + 1))
+                #if (epoch+1)%5 == 0:
+                #    self.save("Epoch%02d" % (epoch + 1))
 
             dist.barrier()
 
