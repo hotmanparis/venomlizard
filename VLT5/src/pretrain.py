@@ -125,7 +125,7 @@ class Trainer(TrainerBase):
             elif 'bart' in self.args.backbone:
                 project_name = "VLBart_Pretrain"
 
-            """
+
             wandb.init(project=project_name)
             wandb.run.name = self.args.run_name
             wandb.config.update(self.args)
@@ -135,7 +135,7 @@ class Trainer(TrainerBase):
             base_path = str(src_dir.parent)
             src_dir = str(src_dir)
             wandb.save(os.path.join(src_dir + "/*.py"), base_path=base_path)
-            """
+
 
         if self.args.distributed:
             dist.barrier()
@@ -260,7 +260,7 @@ class Trainer(TrainerBase):
                         if loss_count > 0:
                             avg_loss = loss/loss_count
                             losses_str += f"{name} ({loss_count}): {avg_loss:.3f} "
-                            #wandb.log({f'Train Loss/{name}': avg_loss}, step=epoch)
+                            wandb.log({f'Train Loss/{name}': avg_loss}, step=epoch)
 
                 losses_str += '\n'
                 print(losses_str)
@@ -284,7 +284,7 @@ class Trainer(TrainerBase):
                         if loss_count > 0:
                             avg_loss = loss / loss_count
                             losses_str += f"{name} ({loss_count}): {avg_loss:.3f} "
-                            #wandb.log({f'Valid Loss/{name}': avg_loss}, step=epoch)
+                            wandb.log({f'Valid Loss/{name}': avg_loss}, step=epoch)
 
                 losses_str += '\n'
                 print(losses_str)
@@ -310,11 +310,11 @@ class Trainer(TrainerBase):
                     for dset in dset2cnt:
                         dset2accu[dset] = dset2score[dset] / dset2cnt[dset]
                     accu_str = "Overall QA Acc %0.4f" % (accu)
-                    #wandb.log({f'Valid QA Acc/Overall': accu}, step=epoch)
+                    wandb.log({f'Valid QA Acc/Overall': accu}, step=epoch)
                     sorted_keys = sorted(dset2accu.keys())
                     for key in sorted_keys:
                         accu_str += ", %s Acc %0.4f" % (key, dset2accu[key])
-                        #wandb.log({f'Valid QA Acc/{key}': dset2accu[key]}, step=epoch)
+                        wandb.log({f'Valid QA Acc/{key}': dset2accu[key]}, step=epoch)
                     print(accu_str)
                     accu_str += '\n\n'
 
@@ -333,8 +333,8 @@ class Trainer(TrainerBase):
 
             dist.barrier()
 
-        #if self.verbose:
-        #    wandb.log({'finished': True})
+        if self.verbose:
+            wandb.log({'finished': True})
 
     def evaluate_epoch(self, epoch):
         LOSSES_NAME = self.args.LOSSES_NAME
