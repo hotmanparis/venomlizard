@@ -19,6 +19,6 @@ python -m torch.distributed.launch \
         --losses 'lm,qa,ground_caption,refer,itm' \
         --backbone 't5-base' \
         --output $output ${@:2} \
-        --epoch 60 \
+        --epoch 120 \
 
 

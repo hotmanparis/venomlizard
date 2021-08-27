@@ -328,7 +328,7 @@ class Trainer(TrainerBase):
 
                 #self.save("Epoch%02d" % (epoch + 1))
 
-                if (epoch+1)%5 == 0:
+                if (epoch+1)%10 == 0:
                     self.save("Epoch%02d" % (epoch + 1))
 
             dist.barrier()
