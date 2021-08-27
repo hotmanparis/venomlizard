@@ -1,7 +1,7 @@
 # The name of experiment
 name=VLT5
 
-output=snap/pretrain/$name
+output=snap/pretrain_reset/$name
 
 PYTHONPATH=$PYTHONPATH:./src \
 python -m torch.distributed.launch \
