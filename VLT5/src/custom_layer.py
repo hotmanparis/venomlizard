@@ -63,10 +63,17 @@ class ConditionTextImage(nn.Module):
         self.fc_0 = nn.Linear(hdim, hdim//factor)
         self.fc_1 = nn.Linear(hdim//factor, hdim)
         self.actvn = nn.ReLU()
+        self.groupnorm = nn.GroupNorm(12, hdim)
 
-    def forward(self, L, V):
-        V = V.unsqueeze(1)
-        VL = L + V
+    def forward(self, L, V, mask):
+        L = L[mask]
+        L_gn = L.transpose(1,2)
+        L_gn = self.groupnorm(L_gn)
+        L_gn = L_gn.transpose(1,2)
+        V = self.groupnorm(V)
+        mask_sum = torch.sum(mask, dim=1)
+        V = torch.repeat_interleave(V, mask_sum, dim=0)
+        VL = L_gn + V
         VL = self.fc_0(self.actvn(VL))
         VL = self.fc_1(self.actvn(VL))
 

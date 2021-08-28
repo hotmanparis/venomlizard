@@ -186,13 +186,13 @@ class JointEncoder(T5Stack):
         self.model_parallel = False
         self.device_map = None
 
-        #self.conditiontext_0 = ConditionTextImage(config.d_model, factor=2)
-        #self.conditiontext_1 = ConditionTextImage(config.d_model, factor=2)
+        self.conditiontext_0 = ConditionTextImage(config.d_model, factor=2)
+        self.conditiontext_1 = ConditionTextImage(config.d_model, factor=2)
 
-        self.conditiontext_00 = ConditionTextImage2(config.d_model, factor=1)
+        #self.conditiontext_00 = ConditionTextImage2(config.d_model, factor=1)
 
-        self.groupnorm_l = nn.GroupNorm(8, config.d_model)
-        self.groupnorm_v = nn.GroupNorm(8, config.d_model)
+        #self.groupnorm_l = nn.GroupNorm(8, config.d_model)
+        #self.groupnorm_v = nn.GroupNorm(8, config.d_model)
 
     def set_input_embeddings(self, new_embeddings):
         self.embed_tokens = new_embeddings
@@ -236,16 +236,16 @@ class JointEncoder(T5Stack):
 
         V_L = vis_embeds.size(1)
 
-        #inputs_embeds = self.conditiontext_0(inputs_embeds, vis_c)
-        #inputs_embeds = self.conditiontext_1(inputs_embeds, vis_c)
+        inputs_embeds[mask] = self.conditiontext_0(inputs_embeds, vis_c, mask).float()
+        inputs_embeds[mask] = self.conditiontext_1(inputs_embeds, vis_c, mask).float()
 
-        inputs_embeds = inputs_embeds.transpose(1,2)
-        inputs_embeds = self.groupnorm_l(inputs_embeds)
-        inputs_embeds = inputs_embeds.transpose(1,2)
+        #inputs_embeds = inputs_embeds.transpose(1,2)
+        #inputs_embeds = self.groupnorm_l(inputs_embeds)
+        #inputs_embeds = inputs_embeds.transpose(1,2)
 
-        vis_c = self.groupnorm_l(vis_c)
+        #vis_c = self.groupnorm_l(vis_c)
 
-        inputs_embeds[mask] = self.conditiontext_00(inputs_embeds, vis_c, mask).float()
+        #inputs_embeds[mask] = self.conditiontext_00(inputs_embeds, vis_c, mask).float()
 
         #torch.save(inputs_embeds, "fireplace2.pt")
 
