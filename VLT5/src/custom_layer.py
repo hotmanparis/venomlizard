@@ -67,9 +67,9 @@ class ConditionTextImage(nn.Module):
 
     def forward(self, L, V, mask):
         L = L[mask]
-        L_gn = L.transpose(1,2)
-        L_gn = self.groupnorm(L_gn)
-        L_gn = L_gn.transpose(1,2)
+        #L_gn = L.transpose(1,2)
+        L_gn = self.groupnorm(L)
+        #L_gn = L_gn.transpose(1,2)
         V = self.groupnorm(V)
         mask_sum = torch.sum(mask, dim=1)
         V = torch.repeat_interleave(V, mask_sum, dim=0)
