@@ -236,8 +236,8 @@ class JointEncoder(T5Stack):
 
         V_L = vis_embeds.size(1)
 
-        inputs_embeds[mask] = self.conditiontext_0(inputs_embeds, vis_c, mask).float()
-        inputs_embeds[mask] = self.conditiontext_1(inputs_embeds, vis_c, mask).float()
+        #inputs_embeds[mask] = self.conditiontext_0(inputs_embeds, vis_c, mask).float()
+        #inputs_embeds[mask] = self.conditiontext_1(inputs_embeds, vis_c, mask).float()
 
         #inputs_embeds = inputs_embeds.transpose(1,2)
         #inputs_embeds = self.groupnorm_l(inputs_embeds)
