@@ -1,7 +1,7 @@
 # The name of experiment
 name=VLT5
 
-output=snap/ori/$name
+output=snap/ov1_untie_groupnorm/$name
 
 PYTHONPATH=$PYTHONPATH:./src \
 python -m torch.distributed.launch \

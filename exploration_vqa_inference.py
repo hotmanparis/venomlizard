@@ -7,7 +7,7 @@ from param import parse_args
 args = parse_args(
     parse=False,
     backbone='t5-base',
-    load='VLT5/overfit2/Epoch30'
+    load='VLT5/overfit1/Epoch30'
 )
 args.gpu = 0
 
@@ -22,7 +22,7 @@ from VLT5.inference.modeling_frcnn import GeneralizedRCNN
 from VLT5.inference.utils import Config, get_data
 
 #image_filename = ["input.jpg"]
-image_filename = ["fireplace2.jpg"]
+image_filename = ["firehydrant2.jpg"]
 frcnn_cfg = Config.from_pretrained("unc-nlp/frcnn-vg-finetuned")
 frcnn = GeneralizedRCNN.from_pretrained("unc-nlp/frcnn-vg-finetuned", config=frcnn_cfg)
 image_preprocess = Preprocess(frcnn_cfg)

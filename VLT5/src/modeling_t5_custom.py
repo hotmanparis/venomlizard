@@ -236,8 +236,8 @@ class JointEncoder(T5Stack):
 
         V_L = vis_embeds.size(1)
 
-        #inputs_embeds[mask] = self.conditiontext_0(inputs_embeds, vis_c, mask).float()
-        #inputs_embeds[mask] = self.conditiontext_1(inputs_embeds, vis_c, mask).float()
+        inputs_embeds[mask] = self.conditiontext_0(inputs_embeds, vis_c, mask).float()
+        inputs_embeds[mask] = self.conditiontext_1(inputs_embeds, vis_c, mask).float()
 
         #inputs_embeds = inputs_embeds.transpose(1,2)
         #inputs_embeds = self.groupnorm_l(inputs_embeds)
@@ -247,7 +247,7 @@ class JointEncoder(T5Stack):
 
         #inputs_embeds[mask] = self.conditiontext_00(inputs_embeds, vis_c, mask).float()
 
-        #torch.save(inputs_embeds, "fireplace2.pt")
+        #torch.save(inputs_embeds, "firehydrantt2.pt")
 
         inputs_embeds = torch.cat([inputs_embeds, vis_embeds], dim=1)
 
@@ -417,9 +417,9 @@ class VLT5(T5ForConditionalGeneration):
 
     def set_input_embeddings(self, new_embeddings):
         self.shared = new_embeddings
-        #new_embeddings_copy = copy.deepcopy(new_embeddings)
-        #self.encoder.set_input_embeddings(new_embeddings_copy)
-        self.encoder.set_input_embeddings(new_embeddings)
+        new_embeddings_copy = copy.deepcopy(new_embeddings)
+        self.encoder.set_input_embeddings(new_embeddings_copy)
+        #self.encoder.set_input_embeddings(new_embeddings)
         self.decoder.set_input_embeddings(new_embeddings)
 
     def extend_vocab(self, vocab_size):

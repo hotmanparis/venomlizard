@@ -21,13 +21,13 @@ torch.norm(a)
 
 hydrant0 = torch.load("firehydrant0.pt")
 hydrant1 = torch.load("firehydrant1.pt")
-hydrant2 = torch.load("firehydrant2.pt")[0][0]
+hydrant2 = torch.load("firehydrantt2.pt")[0][0]
 hydrant3 = torch.load("firehydrant3.pt")
 
 place0 = torch.load("fireplace0.pt")
 place1 = torch.load("fireplace1.pt")
-place2 = torch.load("fireplace2.pt")[0][0]
-place3 = torch.load("fireplace3.pt")
+place2 = torch.load("fireplacee2.pt")[0][0]
+place3 = torch.load("fireplacee3.pt")[0][0]
 
 place3_20 = torch.load("fireplace3_20.pt")
 hydrant3_20 = torch.load("firehydrant3_20.pt")
